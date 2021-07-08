@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getEmployee,setEmployee,pingPong } from "./../controllers/employee";
+import { getEmployee,setEmployee,pingPong,updateEmployee,deleteEmployee } from "./../controllers/employee";
 
 const router:Router = Router();
 
@@ -8,8 +8,13 @@ router.get("/",pingPong);
 
 // For Employee
 router
-.route("/empoloyee",)
+.route("/employee",)
 .get(getEmployee)
 .post(setEmployee)
+
+router
+.route("/employee/:id")
+.patch(updateEmployee)
+.delete(deleteEmployee)
 
 export default router;

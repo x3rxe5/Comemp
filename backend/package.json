@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
+    "build": "tsc -w",
     "prestart": "npm run build",
-    "start": "nodemon .",
+    "start": "nodemon dist/index.js",
     "start:node": "node ."
   },
   "keywords": [],
