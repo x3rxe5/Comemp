@@ -5,7 +5,7 @@ import responseData from "./../utils/factory";
 
 const getAllCompany = async (req:Request,res:Response):Promise<void> => {
     try{
-        const list:ICompany[] = await Company.find();
+        const list:ICompany[] = await Company.find()
         responseData(res,200,list);
     }catch(err){
         responseData(res,400,err)
@@ -23,7 +23,10 @@ const setCompany = async (req:Request,res:Response):Promise<void> => {
 
 const getCompany = async (req:Request,res:Response):Promise<void> => {
     try{
-        const list = await Company.findById(req.params.id);
+        const list = await Company.findById(req.params.id).populate({
+            path:'emp_list',
+            select:"-__v -_id"
+        });
         responseData(res,200,list);
     }catch(err){
         responseData(res,400,err)

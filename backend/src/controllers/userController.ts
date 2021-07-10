@@ -30,4 +30,17 @@ const deleteUser = async (req:Request,res:Response):Promise<void> => {
         responseData(res,400,err);
     }
 }
-export { allUser,deleteUser,getUser };
+
+const updateUser  = async (req:Request,res:Response):Promise<void> => {
+    try{
+        const user = await Auth.findByIdAndUpdate(req.params.id,req.body,{
+            new:true,
+            runValidators:true
+        });
+        responseData(res,201,user);
+    }catch(err){
+        responseData(res,400,err);
+    }
+}
+
+export { allUser,deleteUser,getUser,updateUser };

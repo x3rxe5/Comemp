@@ -2,7 +2,7 @@ import { model,Schema } from "mongoose";
 import { ICompany } from "../types/company";
 
 const companySchema:Schema = new Schema({
-    name:{
+    companyName:{
         type:String,
         required:[true,"company name must required"]
     },
@@ -10,17 +10,43 @@ const companySchema:Schema = new Schema({
         type:String,
         required:[true,"company name must required"]
     },
-    total_employee:{ type:Number },
-    emp_list: {
-        type:Schema.Types.ObjectId,
-        ref:"employee"
+    total_employee:{
+        type:Number,
+        default:0
     },
+    emp_list: [
+        {
+            type:Schema.Types.ObjectId,
+            ref:"employee"
+        }
+    ],
     details:String
 });
 
-// companySchema.pre<ICompany>("save",function(next){
-//     this.total_employee = this.emp_list.length;
-//     next();
-// })
+
+companySchema.statics.calc = async function(empId):Promise<any>{
+    const stats = this.aggregate([
+        {
+            $match:{ employee: empId },
+            $count:"total employee"
+        }
+    ]);
+
+    console.log("total employee list -> ",stats);
+}
+
+companySchema.pre<ICompany>("save",async function(next){
+    let count:number = 0;
+    // this.total_employee = await this.emp_list.map(el => count += 1);
+
+    next();
+});
+
+
+
+companySchema.post("save",async function(next){
+    // this.constructor.calc(this.emp_list);
+    // this.total_employee = await this.emp_list.length;
+})
 
 export default model<ICompany> ("company",companySchema);

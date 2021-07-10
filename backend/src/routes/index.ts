@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getEmployee,setEmployee,pingPong,updateEmployee,deleteEmployee } from "./../controllers/employeeController";
 import { login,signup }  from "./../controllers/authController";
-import { allUser,deleteUser,getUser } from "../controllers/userController";
+import { allUser,deleteUser,getUser,updateUser } from "../controllers/userController";
 import {
     getAllCompany,
     setCompany,
@@ -28,6 +28,7 @@ router
 router
 .route("/user/:id")
 .get(getUser)
+.patch(updateUser)
 .delete(deleteUser);
 
 /*
