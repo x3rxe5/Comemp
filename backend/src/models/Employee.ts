@@ -2,6 +2,16 @@ import { IEmployee } from "./../types/employee";
 import { model,Schema } from "mongoose";
 
 const employeeSchema: Schema = new Schema({
+    companyName: {
+        type: Schema.Types.ObjectId,
+        ref: "company",
+        required: [true,"user must have company name" ]
+    },
+    username: {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: [true,"user must have unique user name"]
+    },
     fname:{
         type:String,
         required:[true,"Please provide a first name"],
@@ -23,8 +33,19 @@ const employeeSchema: Schema = new Schema({
         type:Date,
         default:Date.now(),
         required:[true," Please provide an DOB"]
+    },
+    role:{
+        type:String,
+        enum:["CEO","founder","employee","project-manager"],
+        default:"employee",
+        required:[true,"Please Provide user role"],
+    },
+    salary:{
+        type:Number,
+        required:[true,"Please Provide user role"],
+        min:10000,
+        max:200000,
     }
-
 });
 
 

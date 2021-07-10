@@ -6,6 +6,7 @@ import bcryptjs from "bcryptjs";
 const AuthSchema:Schema = new Schema({
     username:{
         type:String,
+        unique:true,
         required:[true,"user name must required"]
     },
     email :{
@@ -19,6 +20,7 @@ const AuthSchema:Schema = new Schema({
         required:[true,"Please provide a password "],
         minlength:6,
         maxlength:50,
+        select:false
     },
     confirmPassword:{
         type:String,
@@ -26,6 +28,10 @@ const AuthSchema:Schema = new Schema({
         minlength:6,
         maxlength:50,
     },
+    photo:{
+        type:String,
+        required:[true,"Please provide a image"]
+    }
 });
 
 
@@ -37,6 +43,12 @@ AuthSchema.pre<IAuth>("save",async function(next){
     }else{
         throw new Error("Password is not matching ");
     }
-})
+
+    next();
+});
+
+// AuthSchema.methods.correctPassword = async function(candidatePassword:string,userPassword:string):Promise<boolean> {
+//     return await bcryptjs.compare(candidatePassword,userPassword)
+// }
 
 export default model<IAuth>("users",AuthSchema);
