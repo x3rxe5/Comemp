@@ -6,7 +6,7 @@ export interface ICompany extends Document{
     companyName:string;
     address:string;
     total_employee?:number;
-    emp_list:Array<Types.ObjectId> | Types.ObjectId | Array<Object>;
-    // emp_list:Types.ObjectId;
+    // emp_list:Types.ObjectId[] | Types.ObjectId | Object[];
+    emp_list:Types.ObjectId;
     details:string;
 }

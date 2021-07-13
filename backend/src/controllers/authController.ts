@@ -4,6 +4,7 @@ import Auth from './../models/Auth';
 import  responseData from "./../utils/factory";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
+import { promisify } from "util";
 
 
 const signToken = (id:string):any => {

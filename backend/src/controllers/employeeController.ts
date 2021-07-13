@@ -1,67 +1,40 @@
 import { Request,Response } from 'express';
 import { IEmployee } from './../types/employee';
 import Employee from './../models/Employee';
-import  responseData from "./../utils/factory";
+import FactoryClass from './../utils/FactoryClass';
+let obj:any;
 
-
+const getAllEmployee = async (req:Request , res:Response):Promise<void> => {
+    const emp:IEmployee[] = await Employee.find();
+    obj = new FactoryClass(res,200,emp);
+    obj.tryResponseMethod();
+}
 
 const getEmployee = async (req:Request , res:Response):Promise<void> => {
-    try{
-        const emp:IEmployee[] = await Employee.find();
-        responseData(res,200,emp);
-    }catch(err){
-        responseData(res,400,err);
-    }
+    const emp:IEmployee = await Employee.findById(req.params.id);
+    const f = new FactoryClass(res,200,emp);
+    f.tryResponseMethod();
 }
 
 const setEmployee = async (req:Request,res:Response):Promise<void> => {
-    try{
-        const emp =  req.body;
-        console.log(`Employee ${emp}`)
-        const doc:IEmployee = await Employee.create(emp);
-        res.status(201).json({
-            status:"success",
-            doc
-        })
-    }catch(err){
-        console.log(`error from setting up employee -> ${err}`);
-        res.status(400).json({
-            status:"failed",
-            err
-        })
-    }
+    const doc:IEmployee = await Employee.create(req.body);
+    const f = new FactoryClass(res,200,doc);
+    f.tryResponseMethod();
 }
 
 const updateEmployee = async (req:Request,res:Response):Promise<void> => {
-    try{
-        const doc = await Employee.findByIdAndUpdate(req.params.id,req.body,{
-            new:true,
-            runValidators:true
-        });
-        res.status(201).json({
-            status:"success",
-            doc
-        })
-    }catch(err){
-        res.status(400).json({
-            status:"failed",
-            err
-        })
-    }
+    const doc = await Employee.findByIdAndUpdate(req.params.id,req.body,{
+        new:true,
+        runValidators:true
+    });
+    const f = new FactoryClass(res,200,doc);
+    f.tryResponseMethod();
 }
 
 const deleteEmployee = async (req:Request,res:Response):Promise<void> => {
-    try{
-        const doc = await Employee.findByIdAndDelete(req.params.id);
-        res.status(204).json({
-            status:"success",
-        })
-    }catch(err){
-        res.status(400).json({
-            status:"failed",
-            err
-        })
-    }
+    const doc = await Employee.findByIdAndDelete(req.params.id);
+    const f = new FactoryClass(res,200,doc);
+    f.tryResponseMethod();
 }
 
 const pingPong = (req:Request,res:Response):void => {
@@ -72,4 +45,4 @@ const pingPong = (req:Request,res:Response):void => {
 }
 
 
-export { getEmployee,setEmployee,pingPong,deleteEmployee,updateEmployee }
+export { getEmployee,setEmployee,pingPong,deleteEmployee,updateEmployee,getAllEmployee }

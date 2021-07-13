@@ -1,66 +1,15 @@
-import { Router } from "express";
-import { getEmployee,setEmployee,pingPong,updateEmployee,deleteEmployee } from "./../controllers/employeeController";
-import { login,signup }  from "./../controllers/authController";
-import { allUser,deleteUser,getUser,updateUser } from "../controllers/userController";
-import {
-    getAllCompany,
-    setCompany,
-    getCompany,
-    updateCompany,
-    deleteCompany
-} from "./../controllers/companyController";
+import userRoute from "./userRoutes";
+import companyRoute from "./companyRoutes";
+import authRoute from "./authRoutes";
+import employeeRoute from "./employeeRoutes";
+import express from "express";
 
-const router:Router = Router();
+const app = express();
 
-// Test
-router.get("/",pingPong);
+app.use(userRoute);
+app.use(employeeRoute);
+app.use(authRoute);
+app.use(companyRoute);
 
-/*
-    User
-*/
-router.post("/signup",signup);
-router.post("/login",login);
+export default app;
 
-router
-.route("/user")
-.get(allUser)
-
-router
-.route("/user/:id")
-.get(getUser)
-.patch(updateUser)
-.delete(deleteUser);
-
-/*
-    Employee
-*/
-router
-.route("/employee",)
-.get(getEmployee)
-.post(setEmployee)
-
-router
-.route("/employee/:id")
-.patch(updateEmployee)
-.delete(deleteEmployee)
-
-
-/*
-    Company
-*/
-router
-.route("/company")
-.get(getAllCompany)
-.post(setCompany)
-
-router
-.route("/company/:id")
-.get(getCompany)
-.patch(updateCompany)
-.delete(deleteCompany)
-
-
-
-
-
-export default router;

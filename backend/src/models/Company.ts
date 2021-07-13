@@ -35,18 +35,18 @@ companySchema.statics.calc = async function(empId):Promise<any>{
     console.log("total employee list -> ",stats);
 }
 
-companySchema.pre<ICompany>("save",async function(next){
-    let count:number = 0;
-    // this.total_employee = await this.emp_list.map(el => count += 1);
+// companySchema.pre<ICompany>("save",async function(next){
+//     const count:number = 0;
+//     // this.total_employee = await this.emp_list.map(el => count += 1);
 
-    next();
-});
+//     next();
+// });
 
 
 
-companySchema.post("save",async function(next){
-    // this.constructor.calc(this.emp_list);
-    // this.total_employee = await this.emp_list.length;
-})
+// companySchema.post("save",async function(next){
+//     // this.constructor.calc(this.emp_list);
+//     // this.total_employee = await this.emp_list.length;
+// })
 
 export default model<ICompany> ("company",companySchema);

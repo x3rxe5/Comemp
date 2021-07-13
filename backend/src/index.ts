@@ -1,4 +1,4 @@
-import express,{ Errback } from "express";
+import express,{ Request,Response } from "express";
 import cors from "cors";
 import  morgan from "morgan";
 import dotenv from "dotenv";
@@ -28,6 +28,14 @@ connect(DB_URL, {
 
 const server = app.listen(PORT,() => {
 	console.log(chalk.green(`App is listening on 👉 ${chalk.black.bgWhite.bold(String(PORT))}`));
+});
+
+app.all("*",(req:Request,res:Response):any => {
+	const message:string = `Dont find [ ${req.params[0]} ] on this server`
+	res.status(400).json({
+		status:"FAILURE",
+		body:message
+	});
 });
 
 process.on("unhandledRejection", (err:any)=> {
