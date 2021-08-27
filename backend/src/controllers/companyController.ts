@@ -2,10 +2,15 @@ import { Request,Response } from 'express';
 import { ICompany } from './../types/company';
 import Company from './../models/Company';
 import responseData from "./../utils/factory";
+import { nanoid } from 'nanoid';
+
 
 const getAllCompany = async (req:Request,res:Response):Promise<void> => {
     try{
-        const list:ICompany[] = await Company.find()
+        const list:ICompany[] = await Company.find().populate({
+            path:"company_owner",
+            select:"username photo _id"
+        });
         responseData(res,200,list);
     }catch(err){
         responseData(res,400,err)
@@ -14,7 +19,7 @@ const getAllCompany = async (req:Request,res:Response):Promise<void> => {
 
 const setCompany = async (req:Request,res:Response):Promise<void> => {
     try{
-        const company = await Company.create(req.body);
+        const company = await Company.create({...req.body,company_owner:req.user._id,shared_id:nanoid(10)});
         responseData(res,201,company);
     }catch(err){
         responseData(res,400,err)

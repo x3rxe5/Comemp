@@ -31,6 +31,11 @@ const AuthSchema:Schema = new Schema({
     photo:{
         type:String,
         required:[true,"Please provide a image"]
+    },
+    role:{
+        type:String,
+        enum: ['user', 'super-user'],
+        default:"user"
     }
 });
 

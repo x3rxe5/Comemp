@@ -7,17 +7,22 @@ import {
     deleteCompany
 } from "./../controllers/companyController";
 
+import {
+    authMiddleware,
+    ProtectMiddleware,
+    ProtectCompanyCreateMiddleware
+} from "./../middlewares/authMiddleware"
 
 const router:Router = Router();
 
 router
 .route("/company")
-.get(getAllCompany)
-.post(setCompany)
+.get(authMiddleware,ProtectMiddleware,getAllCompany)
+.post(authMiddleware,ProtectCompanyCreateMiddleware,setCompany)
 
 router
 .route("/company/:id")
-.get(getCompany)
+.get(authMiddleware,getCompany)
 .patch(updateCompany)
 .delete(deleteCompany)
 

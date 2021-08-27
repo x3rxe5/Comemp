@@ -1,5 +1,5 @@
 import { Router } from  "express";
-import { authMiddleware } from "./../middlewares/authMiddleware";
+import { authMiddleware,ProtectMiddleware } from "./../middlewares/authMiddleware";
 
 import {
     allUser,
@@ -12,13 +12,13 @@ const router:Router = Router();
 
 router
 .route("/user")
-.get(authMiddleware,allUser)
+.get(authMiddleware,ProtectMiddleware,allUser)
 
 router
 .route("/user/:id")
-.get(getUser)
-.patch(updateUser)
-.delete(deleteUser);
+.get(authMiddleware,getUser)
+.patch(authMiddleware,updateUser)
+.delete(authMiddleware,deleteUser);
 
 
 export default router;

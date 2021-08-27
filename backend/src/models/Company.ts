@@ -2,26 +2,41 @@ import { model,Schema } from "mongoose";
 import { ICompany } from "../types/company";
 
 const companySchema:Schema = new Schema({
-    companyName:{
-        type:String,
-        required:[true,"company name must required"]
+        companyName:{
+            type:String,
+            required:[true,"company name must required"]
+        },
+        address:{
+            type:String,
+            required:[true,"company name must required"]
+        },
+        company_owner:{
+            type: Schema.Types.ObjectId,
+            ref: "users",
+            required: [true,"user must have unique user name"]
+        },
+        total_employee:{
+            type:Number,
+            default:0
+        },
+        shared_id:{
+            type:String,
+            unique:true,
+            required:[true,"Company must have its shared id"]
+        },
+        emp_list: [
+            {
+                type:Schema.Types.ObjectId,
+                ref:"employee"
+            }
+        ],
+        details:String
     },
-    address:{
-        type:String,
-        required:[true,"company name must required"]
-    },
-    total_employee:{
-        type:Number,
-        default:0
-    },
-    emp_list: [
-        {
-            type:Schema.Types.ObjectId,
-            ref:"employee"
-        }
-    ],
-    details:String
-});
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+    }
+);
 
 
 companySchema.statics.calc = async function(empId):Promise<any>{

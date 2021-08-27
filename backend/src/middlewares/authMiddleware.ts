@@ -1,66 +1,57 @@
-import {Request,Response,NextFunction} from "express";
+import { Request,Response,NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "./../models/Auth";
-
-// interface IUserRequest extends Request{
-//     user:string;
-// }
+import responseData from "../utils/factory";
+import { promisify } from "util";
 
 const authMiddleware = async (req:Request,res:Response,next:NextFunction):Promise<any> => {
     let token:any;
+
     if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
         token = req.headers.authorization.split(" ")[1];
     }
-    console.log(token);
-    if(!token){
-        console.log(`error occured`);
-    }
-
+    
     await jwt.verify(token,process.env.JWT_SECRET, async (err:any,decoded:any):Promise<void> => {
         if(err){
-            next(new Error("cant find token"));
+            const rest = res.status(500).json({
+                message:"FAILED",
+                error:"Invalid Token",
+            })
+            next(rest);
         }else{
             try{
                 const freshUser = await User.findById(decoded.id);
-                console.log(`this is user ${freshUser}`);
                 req.user = freshUser;
                 next();
             }catch(err){
-                next(new Error("cant find token"));
+                next();
             }
         }
     })
 }
 
+const ProtectMiddleware = async (req:Request,res:Response,next:NextFunction):Promise<any> => {
 
-export { authMiddleware }
+    console.log(`user -> `,req.user.role);
 
-    // const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET);
-    // console.log(decoded);
-    // console.log("decoded items -> ",decoded.id);
-    // try{
-    //     // For Postman
-    //     let cookie:string[] = req.headers.cookie.split('');
-    //     for(let i=0;i<4;i++){ cookie.shift() }
-    //     let token:string = cookie.join("");
-    //     if(token){
-    //         jwt.verify(token,process.env.JWT_SECRET, async (err,decodedToken) => {
-    //             if(err){
-    //                 console.log("User does not match");
-    //                 next();
-    //             }else{
-    //                 try{
-    //                     const user = await User.findById(decodedToken._id);
-    //                     console.log(`User found`,user);
-    //                     next();
-    //                 }catch(err){
-    //                     console.log("User does not match");
-    //                     next();
-    //                 }
-    //             }
-    //         })
-    //     }
-    // }catch(err){
-    //     console.log("error occured -> ",err);
-    // }
-    // next();
+    if(req.user.role === "super-user"){
+        next();
+    }else{
+        const resMessage:string = "You are not authorized to fetch the user"
+        next(responseData(res,404,resMessage));
+    }
+}
+
+const ProtectCompanyCreateMiddleware = async (req:Request,res:Response,next:NextFunction):Promise<any> => {
+    if(req.user.role === "super-user") {
+        const resMessage:string = "You are not authorized to create company \n Only Normal User can create company"
+        next(responseData(res,404,resMessage));
+    }else{
+        next();
+    }
+}
+
+
+export { authMiddleware,ProtectMiddleware,ProtectCompanyCreateMiddleware }
+
+

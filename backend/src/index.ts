@@ -10,7 +10,7 @@ import route from "./routes/index";
 const app = express();
 dotenv.config({ path:"./src/config.env"});
 const PORT:number = 5000 || Number(process.env.PORT);
-const DB_URL:string = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@cluster0.05fi8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+const DB_URL:string = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.05fi8.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 
 app.use(express.json());
 app.use(cors());
@@ -24,7 +24,7 @@ connect(DB_URL, {
     useCreateIndex: true
 })
 .then(():void => console.log(chalk.green(`${emoji.get('champagne')} DB CONNECTION SUCCESSFUL ✅`)))
-.catch((err) => console.log(chalk.red(`${emoji.get("exclamation")} ERROR OCCURED -> ${err}`)));
+.catch((err:any) => console.log(chalk.red(`${emoji.get("exclamation")} ERROR OCCURED -> ${err}`)));
 
 const server = app.listen(PORT,() => {
 	console.log(chalk.green(`App is listening on 👉 ${chalk.black.bgWhite.bold(String(PORT))}`));
