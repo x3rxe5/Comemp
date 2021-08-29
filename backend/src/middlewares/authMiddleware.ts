@@ -10,7 +10,7 @@ const authMiddleware = async (req:Request,res:Response,next:NextFunction):Promis
     if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
         token = req.headers.authorization.split(" ")[1];
     }
-    
+
     await jwt.verify(token,process.env.JWT_SECRET, async (err:any,decoded:any):Promise<void> => {
         if(err){
             const rest = res.status(500).json({
@@ -22,6 +22,7 @@ const authMiddleware = async (req:Request,res:Response,next:NextFunction):Promis
             try{
                 const freshUser = await User.findById(decoded.id);
                 req.user = freshUser;
+                console.log(req.user);
                 next();
             }catch(err){
                 next();

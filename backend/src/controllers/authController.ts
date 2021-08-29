@@ -14,7 +14,7 @@ const signToken = (id:string):any => {
     })
 }
 
-const createSendToken = (user:any,res:Response):any => {        
+const createSendToken = (user:any,res:Response):any => {
     const token = signToken(user._id);
     const cookieOptions = {
         expires: new Date( Date.now() + Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24*60*60*1000),
@@ -51,11 +51,9 @@ const login = async (req:Request,res:Response):Promise<void> => {
     if(!email || !password){
        responseData(res,400,"cant find email and password")
     }
-   
+
     const user = await Auth.find({ email }).select("+password -__v");
 
-    
-    
     const passwordChecker:boolean = await checkPassword(password,user[0].password);
 
     const errString:string = "user or password does not match !!! \n Please try again"

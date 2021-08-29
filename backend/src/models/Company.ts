@@ -19,36 +19,49 @@ const companySchema:Schema = new Schema({
             type:Number,
             default:0
         },
-        shared_id:{
+        sharedId:{
             type:String,
             unique:true,
             required:[true,"Company must have its shared id"]
         },
-        emp_list: [
-            {
-                type:Schema.Types.ObjectId,
-                ref:"employee"
-            }
-        ],
+        // emp_list: [
+        //     {
+        //         type:Schema.Types.ObjectId,
+        //         ref:"employee"
+        //     }
+        // ],
         details:String
     },
-    {
-        toJSON: { virtuals: true },
-        toObject: { virtuals: true }
-    }
+    // {
+    //     toJSON: { virtuals: true },
+    //     toObject: { virtuals: true }
+    // }
 );
 
+// Virtualization for Publisher Schema for EMPLOYEE LIST
 
-companySchema.statics.calc = async function(empId):Promise<any>{
-    const stats = this.aggregate([
-        {
-            $match:{ employee: empId },
-            $count:"total employee"
-        }
-    ]);
+companySchema.virtual('emp_list',{
+    ref:"employee",
+    localField:'_id',
+    foreignField:"companyName"
+});
 
-    console.log("total employee list -> ",stats);
-}
+companySchema.set('toObject', { virtuals: true });
+companySchema.set('toJSON', { virtuals: true });
+
+/* +++++++++++++++ Statistic Calculation +++++++++++++++++++++ */
+
+// companySchema.statics.calc = async function(empId):Promise<any>{
+//     const stats = this.aggregate([
+//         {
+//             $match:{ employee: empId },
+//             $count:"total employee"
+//         }
+//     ]);
+
+//     console.log("total employee list -> ",stats);
+// }
+
 
 // companySchema.pre<ICompany>("save",async function(next){
 //     const count:number = 0;
@@ -56,7 +69,6 @@ companySchema.statics.calc = async function(empId):Promise<any>{
 
 //     next();
 // });
-
 
 
 // companySchema.post("save",async function(next){

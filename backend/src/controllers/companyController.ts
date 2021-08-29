@@ -19,7 +19,7 @@ const getAllCompany = async (req:Request,res:Response):Promise<void> => {
 
 const setCompany = async (req:Request,res:Response):Promise<void> => {
     try{
-        const company = await Company.create({...req.body,company_owner:req.user._id,shared_id:nanoid(10)});
+        const company = await Company.create({...req.body,company_owner:req.user._id,sharedId:nanoid(10)});
         responseData(res,201,company);
     }catch(err){
         responseData(res,400,err)
@@ -30,7 +30,7 @@ const getCompany = async (req:Request,res:Response):Promise<void> => {
     try{
         const list = await Company.findById(req.params.id).populate({
             path:'emp_list',
-            select:"-__v -_id"
+            select:"fname lname"
         });
         responseData(res,200,list);
     }catch(err){

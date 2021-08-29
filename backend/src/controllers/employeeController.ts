@@ -1,40 +1,81 @@
 import { Request,Response } from 'express';
 import { IEmployee } from './../types/employee';
-import Employee from './../models/Employee';
-import FactoryClass from './../utils/FactoryClass';
-let obj:any;
+import { ICompany } from "./../types/company";
+import Employee from "./../models/Employee";
+import Company from "./../models/Company";
+import responseData from './../utils/factory';
+
+
+
 
 const getAllEmployee = async (req:Request , res:Response):Promise<void> => {
-    const emp:IEmployee[] = await Employee.find();
-    obj = new FactoryClass(res,200,emp);
-    obj.tryResponseMethod();
+
+    try{
+        const emp:IEmployee[] = await Employee.find();
+        responseData(res,200,emp);
+    }catch(err){
+        responseData(res,400,err);
+    }
+
 }
 
 const getEmployee = async (req:Request , res:Response):Promise<void> => {
-    const emp:IEmployee = await Employee.findById(req.params.id);
-    const f = new FactoryClass(res,200,emp);
-    f.tryResponseMethod();
+
+    try{
+        const emp:IEmployee = await Employee.findById(req.params.id);
+        responseData(res,200,emp);
+    }catch(err){
+        responseData(res,400,err);
+    }
+
 }
 
 const setEmployee = async (req:Request,res:Response):Promise<void> => {
-    const doc:IEmployee = await Employee.create(req.body);
-    const f = new FactoryClass(res,200,doc);
-    f.tryResponseMethod();
+
+    try{
+        
+        const sharedID = await Company.find({ sharedId:req.body.companyName });
+        console.log(`shared id `,sharedID);
+        if(sharedID){
+            console.log(`Hit first`);
+            console.log(`req user id `,req.user._id);
+            const doc:IEmployee = await Employee.create({...req.body,username:req.user._id,companyName:sharedID[0]._id});
+            console.log(`Hit second`);
+            responseData(res,200,doc);
+        }else{
+            const err:string = `There is no company with this id`;
+            responseData(res,400,err);
+        }
+    }catch(err){
+        console.log(err);
+        responseData(res,400,err);
+    }
+
 }
 
 const updateEmployee = async (req:Request,res:Response):Promise<void> => {
-    const doc = await Employee.findByIdAndUpdate(req.params.id,req.body,{
-        new:true,
-        runValidators:true
-    });
-    const f = new FactoryClass(res,200,doc);
-    f.tryResponseMethod();
+
+    try{
+        const doc = await Employee.findByIdAndUpdate(req.params.id,req.body,{
+            new:true,
+            runValidators:true
+        });
+        responseData(res,200,doc);
+    }catch(err){
+        responseData(res,400,err);
+    }
+
 }
 
 const deleteEmployee = async (req:Request,res:Response):Promise<void> => {
-    const doc = await Employee.findByIdAndDelete(req.params.id);
-    const f = new FactoryClass(res,200,doc);
-    f.tryResponseMethod();
+
+    try{
+        const doc = await Employee.findByIdAndDelete(req.params.id);
+        responseData(res,200,doc);
+    }catch(err){
+        responseData(res,400,err);
+    }
+
 }
 
 const pingPong = (req:Request,res:Response):void => {

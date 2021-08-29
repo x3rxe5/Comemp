@@ -8,16 +8,22 @@ import {
     deleteEmployee
 } from "./../controllers/employeeController";
 
+import {
+    // ProtectCompanyCreateMiddleware,
+    // ProtectMiddleware,
+    authMiddleware
+} from "./../middlewares/authMiddleware"
+
 const router:Router = Router();
 
 router
 .route("/employee",)
 .get(getAllEmployee)
-.post(setEmployee)
+.post(authMiddleware,setEmployee)
 
 router
 .route("/employee/:id")
-.get(getEmployee)
+.get(authMiddleware,getEmployee)
 .patch(updateEmployee)
 .delete(deleteEmployee)
 
