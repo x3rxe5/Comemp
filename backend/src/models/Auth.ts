@@ -11,7 +11,7 @@ const AuthSchema:Schema = new Schema({
     },
     email :{
         type:String,
-        unique:true,
+        unique:true,     
         required:[true,"Please provide an email "],
         validate:[validator.isEmail,"Please provide a valid email"],
     },
@@ -48,7 +48,6 @@ AuthSchema.pre<IAuth>("save",async function(next){
     }else{
         throw new Error("Password is not matching ");
     }
-
     next();
 });
 

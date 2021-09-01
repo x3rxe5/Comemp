@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
+// Global Variables
+window.companyName = "ComEmp";
 
 ReactDOM.render(
   <React.StrictMode>

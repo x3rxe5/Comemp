@@ -8,7 +8,7 @@ export interface ICompany extends Document{
     companyName:string;
     address:string;
     total_employee?:number;
-    shared_id:string
+    shared_id:string;
     emp_list:Types.ObjectId;
     details:string;
 }

@@ -53,6 +53,15 @@ const employeeSchema: Schema = new Schema({
     }
 );
 
+// employeeSchema.index({ companyName:1 , username:1 } , { unique:true });
 
+// employeeSchema.pre(/^find/, function(next) {
+      
+//     this.populate({
+//       path: 'users',
+//       select: 'username photo'
+//     });
+//     next();
+//   });
 
 export default model<IEmployee>("employee",employeeSchema);

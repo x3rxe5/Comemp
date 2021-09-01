@@ -33,14 +33,16 @@ const getEmployee = async (req:Request , res:Response):Promise<void> => {
 const setEmployee = async (req:Request,res:Response):Promise<void> => {
 
     try{
-        
+
         const sharedID = await Company.find({ sharedId:req.body.companyName });
-        console.log(`shared id `,sharedID);
         if(sharedID){
-            console.log(`Hit first`);
-            console.log(`req user id `,req.user._id);
-            const doc:IEmployee = await Employee.create({...req.body,username:req.user._id,companyName:sharedID[0]._id});
-            console.log(`Hit second`);
+            console.log("shared id: ", sharedID);
+            console.log("User: ", req.body);
+            const doc:IEmployee = await Employee.create({
+                ...req.body,
+                username:req.user._id,
+                companyName:sharedID[0]._id
+            });
             responseData(res,200,doc);
         }else{
             const err:string = `There is no company with this id`;

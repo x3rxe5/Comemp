@@ -24,21 +24,14 @@ const companySchema:Schema = new Schema({
             unique:true,
             required:[true,"Company must have its shared id"]
         },
-        // emp_list: [
-        //     {
-        //         type:Schema.Types.ObjectId,
-        //         ref:"employee"
-        //     }
-        // ],
         details:String
     },
-    // {
-    //     toJSON: { virtuals: true },
-    //     toObject: { virtuals: true }
-    // }
 );
 
-// Virtualization for Publisher Schema for EMPLOYEE LIST
+companySchema.index(
+    { companyName:1,_id:1},
+    { unique:true}    
+);
 
 companySchema.virtual('emp_list',{
     ref:"employee",
@@ -48,6 +41,9 @@ companySchema.virtual('emp_list',{
 
 companySchema.set('toObject', { virtuals: true });
 companySchema.set('toJSON', { virtuals: true });
+
+export default model<ICompany> ("company",companySchema);
+
 
 /* +++++++++++++++ Statistic Calculation +++++++++++++++++++++ */
 
@@ -75,5 +71,3 @@ companySchema.set('toJSON', { virtuals: true });
 //     // this.constructor.calc(this.emp_list);
 //     // this.total_employee = await this.emp_list.length;
 // })
-
-export default model<ICompany> ("company",companySchema);
