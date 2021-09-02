@@ -30,7 +30,7 @@ const AuthSchema:Schema = new Schema({
     },
     photo:{
         type:String,
-        required:[true,"Please provide a image"]
+        required:[true,"Please provide an image"]
     },
     role:{
         type:String,

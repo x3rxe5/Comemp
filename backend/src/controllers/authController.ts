@@ -4,10 +4,37 @@ import Auth from './../models/Auth';
 import  responseData from "./../utils/factory";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
+import { nanoid } from "nanoid";
+import multer from 'multer';
+import path from "path";
 
-// type IResAuth = Pick<IAuth, "email" | "username" | "_id" | "password" | "photo" | "role" >;
+/* +++++++++++++++ UTIL FUNCTIONS ++++++++++++++++++++ */
+
+const storage = multer.diskStorage({
+    destination: function(req:Request, file, cb) {
+        cb(null, 'images');
+    },
+    filename: function(req, file, cb) {   
+        cb(null, nanoid(4) + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
 
 
+const fileFilter = (req:Request, file:Express.Multer.File, cb:(error:Error | null, answer:boolean ) => void ) => {
+    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if(allowedFileTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+
+/* +++++++++++++++ UTIL FUNCTIONS ++++++++++++++++++++ */
+
+
+
+// Export Functions
 const signToken = (id:string):any => {
     return jwt.sign({ id }, process.env.JWT_SECRET,{
         expiresIn:process.env.JWT_EXPIRES_IN
