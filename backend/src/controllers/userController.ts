@@ -6,7 +6,7 @@ import responseData from "../utils/factory";
 
 
 const allUser = async (req:Request,res:Response):Promise<void> => {
-    console.log(`from middleware -> `,req.user);
+
     try{
         const users:IAuth[] = await Auth.find();
         responseData(res,200,users);

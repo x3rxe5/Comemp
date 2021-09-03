@@ -4,35 +4,6 @@ import Auth from './../models/Auth';
 import  responseData from "./../utils/factory";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
-import { nanoid } from "nanoid";
-import multer from 'multer';
-import path from "path";
-
-/* +++++++++++++++ UTIL FUNCTIONS ++++++++++++++++++++ */
-
-const storage = multer.diskStorage({
-    destination: function(req:Request, file, cb) {
-        cb(null, 'images');
-    },
-    filename: function(req, file, cb) {   
-        cb(null, nanoid(4) + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
-
-
-const fileFilter = (req:Request, file:Express.Multer.File, cb:(error:Error | null, answer:boolean ) => void ) => {
-    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    if(allowedFileTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-}
-
-
-/* +++++++++++++++ UTIL FUNCTIONS ++++++++++++++++++++ */
-
-
 
 // Export Functions
 const signToken = (id:string):any => {
@@ -55,12 +26,19 @@ const createSendToken = (user:any,res:Response):any => {
         token,
         user
     }
+
     responseData(res,201,userObj);
 }
 
 const signup = async (req:Request,res:Response):Promise<void> => {
     try{
-        const user:IAuth = await Auth.create(req.body);
+
+        const { email,username,password,confirmPassword } = req.body;
+        const photo = req.file.filename;
+
+        const formUser = { email,username,password,confirmPassword,photo }
+
+        const user:IAuth = await Auth.create(formUser);
         createSendToken(user,res);
     }catch(err){
         console.log("This is error -> ",err);
@@ -73,6 +51,7 @@ const checkPassword = async (str1:string, str2:string): Promise<any> => {
 }
 
 const login = async (req:Request,res:Response):Promise<void> => {
+    console.log(`This is req body => `,req.body);
     const { email,password } = await req.body;
 
     if(!email || !password){

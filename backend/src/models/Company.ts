@@ -30,7 +30,7 @@ const companySchema:Schema = new Schema({
 
 companySchema.index(
     { companyName:1,_id:1},
-    { unique:true}    
+    { unique:true}
 );
 
 companySchema.virtual('emp_list',{

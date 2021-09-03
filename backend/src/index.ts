@@ -6,6 +6,7 @@ import chalk from "chalk";
 import emoji from "node-emoji";
 import { connect } from "mongoose";
 import route from "./routes/index";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config({ path:"./src/config.env"});
@@ -14,9 +15,25 @@ const DB_URL:string = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(route);
+
+app.get('/cookie', (req, res) => {
+	// Cookies that have not been signed
+	console.log('Cookies: ', req.cookies)
+
+	// Cookies that have been signed
+
+	console.log('Signed Cookies: ', req.signedCookies)
+	res.status(200).json({
+		cookies:req.cookies
+		// req.cookie,
+		// req.cookies,
+		// req.signedCookies,
+	})
+})
 
 connect(DB_URL, {
     useNewUrlParser: true,

@@ -11,7 +11,7 @@ const AuthSchema:Schema = new Schema({
     },
     email :{
         type:String,
-        unique:true,     
+        unique:true,
         required:[true,"Please provide an email "],
         validate:[validator.isEmail,"Please provide a valid email"],
     },

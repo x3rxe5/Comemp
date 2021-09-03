@@ -1,6 +1,9 @@
 import React,{ useState } from 'react';
-// import axios from "axios";
+import axios from "axios";
 import PhotoUpload from '../components/PhotoUpload';
+import { ToastContainer } from 'react-toastify';
+import ToastComponent from '../components/ToastComponent';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Signup() {
   const [user,setUser] = useState({
@@ -9,7 +12,11 @@ export default function Signup() {
     password:'',
     confirmPassword:'',
     photo:''
-  })
+  });
+
+  
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -21,15 +28,22 @@ export default function Signup() {
 
     if(user.username !== '' && user.email !== '' && user.password !== '' && user.confirmPassword !== '' && user.photo !== ''){
       console.log(user);
+      axios.post('http://localhost:5000/signup', formData)
+      .then(res => {
+        console.log(`this is status -> `,res.status);
+        if(res.status === 201){
+          new ToastComponent("You are successfully logged in").onSuccessMessage();          
+        }else if(res.status === 400){
+          new ToastComponent(res.message).onProperFailureMessage();
+        }else{
+          new ToastComponent("You are successfully logged in").onUnknownFailure();
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     }
     
     // Main event to First
-    // axios.post('http://localhost:5000/users/add/', formData)
-    // .then(res => {
-    //   console.log(res);
-    // }).catch(err => {
-    //   console.log(err);
-    // });
   }
 
   const handleChange = (e) => {
@@ -39,7 +53,11 @@ export default function Signup() {
   const handlePhoto = (e) => {
     setUser({...user, photo: e.target.files[0]});
   }
+
+  
   return (
+    <>
+    <ToastContainer />
     <div className=" bg-grey-400 mb-4 p-12">
       <div className="lg:flex items-center justify-center">
         <div className="lg:w-full xl:max-w-screen-sm">
@@ -278,6 +296,7 @@ export default function Signup() {
         </div> */}
       </div>      
     </div>
+    </>
   );
 }
 
