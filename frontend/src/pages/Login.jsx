@@ -19,7 +19,7 @@ export default function Login() {
       formData.append("email",user.email);
       formData.append("password",user.password);
       console.log(user);
-      await axios.post("http://localhost:5000/login",user).then(res => {        
+      await axios.post("http://localhost:5000/login",user,{ withCredentials:true }).then(res => {
         console.log(res);
         if(res.status === 201){
           new ToastComponent("You are successfully logged in").onSuccessMessage();
@@ -38,7 +38,7 @@ export default function Login() {
     }
 
     // const testCookie = () => {
-    //   axios.get("http://localhost:5000/cookie").then(res => {
+    //   axios.get("http://localhost:5000/cookie",{ withCredentials:true }).then(res => {
     //     console.log(res);
     //   }).catch(err => {
     //     console.log(err);

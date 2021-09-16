@@ -28,7 +28,7 @@ export default function Signup() {
 
     if(user.username !== '' && user.email !== '' && user.password !== '' && user.confirmPassword !== '' && user.photo !== ''){
       console.log(user);
-      axios.post('http://localhost:5000/signup', formData)
+      axios.post('http://localhost:5000/signup', formData, { withCredentials:true })
       .then(res => {
         console.log(`this is status -> `,res.status);
         if(res.status === 201){
