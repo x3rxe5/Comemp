@@ -14,6 +14,7 @@ const signToken = (id:string):any => {
 
 const createSendToken = (user:any,res:Response):any => {
     const token = signToken(user._id);
+    
     const cookieOptions = {
         expires: new Date( Date.now() + Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24*60*60*1000),
         httpOnly:true

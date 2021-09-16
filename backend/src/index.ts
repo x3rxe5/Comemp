@@ -9,29 +9,31 @@ import route from "./routes/index";
 import cookieParser from "cookie-parser";
 
 const app = express();
-dotenv.config({ path:"./src/config.env"});
+dotenv.config({ path: "./src/config.env"});
 const PORT:number = 5000 || Number(process.env.PORT);
 const DB_URL:string = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.05fi8.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+	origin: 'http://localhost:3000',
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	allowedHeaders: ['Content-Type'],
+	credentials: true
+}));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(route);
 
 app.get('/cookie', (req, res) => {
-	// Cookies that have not been signed
+
 	console.log('Cookies: ', req.cookies)
 
-	// Cookies that have been signed
+
 
 	console.log('Signed Cookies: ', req.signedCookies)
 	res.status(200).json({
 		cookies:req.cookies
-		// req.cookie,
-		// req.cookies,
-		// req.signedCookies,
 	})
 })
 
