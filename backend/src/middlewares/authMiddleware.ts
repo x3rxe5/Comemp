@@ -2,7 +2,6 @@ import { Request,Response,NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "./../models/Auth";
 import responseData from "../utils/factory";
-import { promisify } from "util";
 
 const authMiddleware = async (req:Request,res:Response,next:NextFunction):Promise<any> => {
     let token:any;

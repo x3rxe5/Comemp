@@ -7,6 +7,9 @@ import emoji from "node-emoji";
 import { connect } from "mongoose";
 import route from "./routes/index";
 import cookieParser from "cookie-parser";
+import validateCookie from "./utils/validateCookie";
+
+// Util Module 
 
 const app = express();
 dotenv.config({ path:"./src/config.env"});
@@ -25,25 +28,7 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(route);
 
-app.get('/validate-cookie', (req, res) => {
-  try{
-    const reqCookies:string = req.cookies["jwt"];
-
-    if(reqCookies.length > 0){
-      res.status(200).json({
-        val:1
-      });
-    }else{
-      res.status(400).json({
-        val:0
-      });
-    }
-  }catch(err){
-    res.status(400).json({
-      val:0
-    });
-  }
-})
+app.get('/validate-cookie',validateCookie);
 
 connect(DB_URL, {
     useNewUrlParser: true,

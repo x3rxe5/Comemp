@@ -14,22 +14,25 @@ import Footer from "./components/footer/Footer";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   return (
     <>
     <Router>
       <Header />
+      <Route path="/signup">
+        <Signup />
+      </Route>
+      <Route path="/login">
+        <Login />
+      </Route>
+      <Route exact path="/">
+          <Home />
+      </Route>
       <Switch>
-        <Route exact path="/">
-            <Home />
-        </Route>
-        <Route path="/signup">
-          <Signup />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
+        <ProtectedRoute exact path="/dashboard" component={Dashboard}/>
       </Switch>
       <Footer />
     </Router>

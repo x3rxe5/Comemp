@@ -34,10 +34,12 @@ const PreloginComponent = () =>{
 }
 
 const PostLoginComponent = () => {
-  const handleClick = async () => {
-    await axios.post(BACKEND_API_URL+"logout",{ withCredentials:true })
+  
+  const handleSubmit = async (e) => {
+    await axios.get(BACKEND_API_URL+"logout",{ withCredentials:true })
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
+
   }
   return(
     <>
@@ -58,9 +60,11 @@ const PostLoginComponent = () => {
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </Link>
-      <button className="inline-flex items-center bg-red-300 border-0 py-2 px-3 hover:px-4 hover:py-3 animate-pulse focus:outline-none hover:bg-red-500 rounded text-white mt-4 md:mt-0 ml-3" onClick={handleClick}>
-        Logout ❌
-      </button>
+      <form onSubmit={handleSubmit}>
+        <button className="inline-flex items-center bg-red-300 border-0 py-2 px-3 hover:px-4 hover:py-3 animate-pulse focus:outline-none hover:bg-red-500 rounded text-white mt-4 md:mt-0 ml-3">
+          Logout ❌
+        </button>
+      </form>
     </>
   )
 }
@@ -71,14 +75,13 @@ export default function Header() {
     const dispatch = useDispatch();
     useEffect(() => {
       axios.get("http://localhost:5000/validate-cookie",{ withCredentials:true })
-      .then(res => {     
-          console.log(res.data);
-          if(res.data.val === 1){
+      .then(res => {               
+          if(res.data.data){
             dispatch(isAuth());
           }
       })
       .catch(err => console.log(err));
-    },[]);
+    },[dispatch]);
 
 
     return (

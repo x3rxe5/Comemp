@@ -35,6 +35,6 @@ const upload = multer({storage,fileFilter});
 
 router.post("/signup",upload.single('photo'),signup);
 router.post("/login",login);
-router.post("/logout",logout)
+router.get("/logout",logout)
 
 export default router;

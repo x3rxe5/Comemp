@@ -1,5 +1,5 @@
 import { Request,Response } from 'express';
-import { IAuth, IResponseAuth } from './../types/auth';
+import { IAuth } from './../types/auth';
 import Auth from './../models/Auth';
 import  responseData from "./../utils/factory";
 import jwt from "jsonwebtoken";
@@ -71,9 +71,14 @@ const login = async (req:Request,res:Response):Promise<void> => {
 
 const logout = async (req:Request,res:Response):Promise<void> => {
     try{
-        createSendToken(" ",res);
+        res.clearCookie("jwt");
+        res.cookie("jwt"," ",{
+          expires:new Date(0)
+        });
+        responseData(res,200,{message:"successfull"});
     }catch(err){
-        responseData(res,400,err)
+      console.log(err);
+      responseData(res,400,err)
     }
 }
 
