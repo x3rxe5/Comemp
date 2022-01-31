@@ -71,11 +71,11 @@ const login = async (req:Request,res:Response):Promise<void> => {
 
 const logout = async (req:Request,res:Response):Promise<void> => {
     try{
-        createSendToken("Garbage String",res);
+        createSendToken(" ",res);
     }catch(err){
         responseData(res,400,err)
     }
 }
 
 
-export { login,signup };
+export { login,signup,logout };

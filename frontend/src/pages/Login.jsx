@@ -1,11 +1,15 @@
-import React,{useState} from 'react';
+ import React,{useState} from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import ToastComponent from '../components/ToastComponent';
 import axios from "axios";
 
+import { isAuth } from '../slices/AuthSlices';
+import { useDispatch } from 'react-redux';
+
 
 export default function Login() {
+    const dispatch = useDispatch();
     const [user,setUser] = useState(
       {
         email:"",
@@ -23,9 +27,10 @@ export default function Login() {
         console.log(res);
         if(res.status === 201){
           new ToastComponent("You are successfully logged in").onSuccessMessage();
-        }else if(res.status === 400){          
+          dispatch(isAuth());
+        }else if(res.status === 400){
           new ToastComponent(res.data).onProperFailureMessage();
-        }else{          
+        }else{
           new ToastComponent("Unknown Error Occured").onUnknownFailure();
         }
       }).catch(err => {
@@ -36,7 +41,7 @@ export default function Login() {
     const handleChange = (e) => {
       setUser({...user, [e.target.name]: e.target.value});
     }
-
+    
     // const testCookie = () => {
     //   axios.get("http://localhost:5000/cookie",{ withCredentials:true }).then(res => {
     //     console.log(res);
@@ -63,7 +68,7 @@ export default function Login() {
 
 
                   <div className="mx-auto max-w-xs">
-                    <form onSubmit={handleSubmit}>                    
+                    <form onSubmit={handleSubmit}>
                     <input
                       className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                       type="email"

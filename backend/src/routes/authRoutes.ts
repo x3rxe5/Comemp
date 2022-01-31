@@ -1,5 +1,5 @@
 import {Router,Request,Response} from "express";
-import { login,signup }  from "./../controllers/authController";
+import { login,signup,logout }  from "./../controllers/authController";
 
 import { nanoid } from "nanoid";
 import multer from 'multer';
@@ -35,6 +35,6 @@ const upload = multer({storage,fileFilter});
 
 router.post("/signup",upload.single('photo'),signup);
 router.post("/login",login);
-
+router.post("/logout",logout)
 
 export default router;
