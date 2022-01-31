@@ -11,7 +11,6 @@ function ProtectedRoute({ component: Component, ...restOfProps }) {
     useEffect(() => {
       axios.get(BACKEND_API_URL+"validate-cookie",{ withCredentials:true })
       .then(res => {     
-          console.log(res.data.data);
           if(res.data.data){
             dispatch(isAuth());
           }
